@@ -1,0 +1,29 @@
+@Library('cohort9library') _
+pipeline{
+  agent any
+  tools {
+    maven "maven"
+  }
+  stages{
+    stage("Checkout"){
+      steps{
+          git credentialsId: 'Github-Cred', url: 'https://github.com/codename-neptune/web-app.git'
+      }
+    }
+    stage("Build"){
+      steps{
+       common("Build")
+      }
+    }
+    stage("Execute sonarqube report"){
+    steps{
+      common("SonarQube Report")
+    }
+  }
+  stage("NExus"){
+    steps{
+      common("Upload Into Nexus")
+    }
+  }
+}
+}
